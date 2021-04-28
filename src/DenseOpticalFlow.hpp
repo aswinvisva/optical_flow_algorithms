@@ -1,0 +1,1 @@
+void getSobelDerivative(cv::Mat frame, cv::Mat &Ix, cv::Mat &Iy);

@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project( OpticalFlowAlgorithms )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( OpticalFlowAlgorithms src/Main.cpp src/DenseOpticalFlow.cpp)
+target_link_libraries( OpticalFlowAlgorithms ${OpenCV_LIBS} )
