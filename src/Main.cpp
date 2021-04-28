@@ -56,13 +56,27 @@ int main(int argc, char** argv)
 
             leastSquaresEstimation(Ix, Iy, It, u, v);
 
+            cv::Mat magnitude, angle, magn_norm;
+
+            cartToPolar(u, v, magnitude, angle, true);
+            normalize(magnitude, magn_norm, 0.0f, 1.0f, NORM_MINMAX);
+
+            angle *= ((1.f / 360.f) * (180.f / 255.f));
+
             Mat norm_u, norm_v;
 
             normalize(u, norm_u, 0.0f, 1.0f, NORM_MINMAX);
             normalize(v, norm_v, 0.0f, 1.0f, NORM_MINMAX);
 
-            imshow("U", norm_u);
-            imshow("V", norm_v);
+             Mat _hsv[3], hsv, hsv8, bgr;
+            _hsv[0] = angle;
+            _hsv[1] = Mat::ones(angle.size(), CV_32F);
+            _hsv[2] = magn_norm;
+            merge(_hsv, 3, hsv);
+            hsv.convertTo(hsv8, CV_8U, 255.0);
+            cvtColor(hsv8, bgr, COLOR_HSV2BGR);
+
+            imshow("Optical Flow", bgr);
         }
 
         imshow("Preview", frame);
