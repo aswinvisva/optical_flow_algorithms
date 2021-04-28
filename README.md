@@ -1,2 +1,3 @@
-# optical_flow_algorithms
-This project aims to explore optical flow algorithms for self-learning and mobile robot applications
+# Lucas-Kanade Optical Flow
+
+This is a very slow, toy implementation of the Lucas-Kanade Optical Flow algorithm for self-learning purposes. 

@@ -17,6 +17,12 @@
 using namespace cv;
 using namespace std;
 
+void preprocessFrame(Mat &frame) 
+{
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
+    cv::resize(frame, frame, cv::Size(512, 512));    
+}
+
 
 int main(int argc, char** argv)
 {
@@ -32,17 +38,39 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    int t = 0;
+    Mat prev;
+
     while(1) {
         cap >> frame;
 
-        Mat gray, Ix, Iy;
+        Mat Ix, Iy, It, flow;
+        
+        preprocessFrame(frame);
 
-        cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+        if(t > 0) {
+            getImageDerivatives(frame, prev, Ix, Iy, It);
 
-        getSobelDerivative(gray, Ix, Iy);
+            cv::Mat u = cv::Mat::zeros(Ix.size(), CV_32F);
+            cv::Mat v = cv::Mat::zeros(Ix.size(), CV_32F);
+
+            leastSquaresEstimation(Ix, Iy, It, u, v);
+
+            Mat norm_u, norm_v;
+
+            normalize(u, norm_u, 0.0f, 1.0f, NORM_MINMAX);
+            normalize(v, norm_v, 0.0f, 1.0f, NORM_MINMAX);
+
+            imshow("U", norm_u);
+            imshow("V", norm_v);
+        }
 
         imshow("Preview", frame);
 
         waitKey(0);
+
+        prev = frame.clone();
+
+        t++;
     }
 }
