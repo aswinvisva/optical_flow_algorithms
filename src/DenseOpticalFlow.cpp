@@ -40,7 +40,7 @@ cv::Mat convolve2D(cv::Mat frame, cv::Mat kernel) {
 
 void getImageDerivatives(cv::Mat frame, cv::Mat prev, cv::Mat &Ix, cv::Mat &Iy, cv::Mat &It) {
     /*
-    Get the Ix, Iy gradients
+    Get the Ix, Iy, It gradients
     */
 
     float xData[4] = {-1, 1, -1, 1};
@@ -58,8 +58,6 @@ void getImageDerivatives(cv::Mat frame, cv::Mat prev, cv::Mat &Ix, cv::Mat &Iy, 
     Ix = convolve2D(frame, Gx) + convolve2D(prev, Gx);
     Iy = convolve2D(frame, Gy) + convolve2D(prev, Gy);
     It = convolve2D(prev, Gt1) + convolve2D(frame, Gt2);
-
-    Mat norm_It, norm_Ix, norm_Iy;
 }
 
 void leastSquaresEstimation(cv::Mat Ix, cv::Mat Iy, cv::Mat It, cv::Mat &u, cv::Mat &v) {
